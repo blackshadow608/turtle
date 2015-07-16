@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href=bootstrap/dist/css/bootstrap.css>
+    <script src="jquery-1.11.3.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="Nestable-master/jquery.nestable.js"></script>
+    <script src="turtle/jquery-turtle.js"></script>
+    <title>TURTLE GRAPHIC</title>
+
+  </head>
+
+  <body>
+  <div class="row">
+    <div class="col-md-5" >      
+<img src="1.png" class="turtle" id="turtle">
+<script>
+    $("#turtle").offset({left: 500, top: 300});
+    $("#turtle").pen('red').pu();
+</script>
+    </div>
+    <div class="col-md-3" id="commandsnds">
+      <div class="btn btn-primary draggable" >MOVE<input type="text"size="3" maxlength="4" value="90" style="color:black"/>px</div>
+      <div class="btn btn-primary draggable" >TURN LEFT<input type="text"size="2" maxlength="3" value="90" style="color:black"/>px</div>
+      <div class="btn btn-primary draggable" >TURN RIGHT<input type="text"size="2" maxlength="3" value="90" style="color:black"/>px</div>
+      <div class="btn btn-primary draggable" style="z-index: 1000;" >UP TAIL</div>
+      <div class="btn btn-primary draggable" >DOWN TAIL</div>
+      <div class="dd">
+</div>
+    </div>
+    <div class="col-md-2" style="height: auto; border: solid 1px black" id="droppable">  
+    <img src="play.jpg" class="play">
+    <img src="pause.png" class="pause">  
+    <img src="stop.jpg" class="stop">
+    <button class="btn btn-primary clear">Clear</button>
+    <input type="range" class="speedRange" min="0.5" max="20" step="2" value="10">
+    </div> 
+  </div> 
+  </body>
+
+  <script>
+  $(function() {
+    $('.clear').click(function(){
+      $.turtle.cg();
+      $('#turtle').offset({left: 500, top: 300}).pu();
+
+    })
+    $( ".draggable" ).draggable({helper: "clone"});
+    $( "#droppable" ).droppable({
+      drop: function( event, ui ) {
+        var clone = $(ui.helper).clone();
+        clone.css("position","relative");
+        clone.css("left","auto");
+        clone.css("top","auto");
+        clone.draggable({
+        });
+        clone.addClass("xyi");
+        $(this).append(clone);
+      }
+    });
+    var isPaused = false;
+    var inputVal= "";
+    var stopIndex = 0;
+    $('.pause').click(function(){isPaused=true;console.log(isPaused)})
+    $('.stop').click(function(){stopIndex=0;isPaused=true;})
+    $('.play').click(function(){    
+      function running(comand, value){
+        $('#turtle').speed($('.speedRange').val());
+        if (comand === "MOVEpx"){
+          $('#turtle').fd(value);
+        }
+        if (comand === "UP TAIL"){
+          $('#turtle').pu();
+        }
+        if (comand === "TURN LEFTpx"){
+          $('#turtle').lt(value);
+        }
+         if (comand === "TURN RIGHTpx"){
+          $('#turtle').rt(value);
+        }
+         if (comand === "DOWN TAIL"){
+          $('#turtle').pd();
+        }
+      }
+      isPaused = false;
+      var commands = $('#droppable').children(".xyi");
+      var i = stopIndex;      
+      function f(){
+        setTimeout(function(){
+          if(commands.eq(i).children('input').val())
+          {
+            inputVal=commands.eq(i).children('input').val();
+          }
+          running(commands.eq(i).text(),inputVal);
+          ++i;
+          console.log(i);
+          if (isPaused) stopIndex=i;
+          if(i>=commands.size()-1) stopIndex=0;
+          if(i<commands.size() && !isPaused){
+            f(stopIndex);
+          }
+        }, 1000/$('.speedRange').val());
+      }
+      f();      
+    });    
+  });
+  </script>
+</html>
