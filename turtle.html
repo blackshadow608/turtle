@@ -6,10 +6,16 @@
     <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="Nestable-master/jquery.nestable.js"></script>
     <script src="turtle/jquery-turtle.js"></script>
+    <script src="script.js"></script>
     <title>TURTLE GRAPHIC</title>
-
   </head>
-
+  <style type="text/css">
+  ul{
+    margin-left: 0;
+    padding-left: 0;
+    list-style-type: none;
+  }
+  </style>
   <body>
   <div class="row">
     <div class="col-md-5" >      
@@ -20,89 +26,27 @@
 </script>
     </div>
     <div class="col-md-3" id="commandsnds">
-      <div class="btn btn-primary draggable" >MOVE<input type="text"size="3" maxlength="4" value="90" style="color:black"/>px</div>
-      <div class="btn btn-primary draggable" >TURN LEFT<input type="text"size="2" maxlength="3" value="90" style="color:black"/>px</div>
-      <div class="btn btn-primary draggable" >TURN RIGHT<input type="text"size="2" maxlength="3" value="90" style="color:black"/>px</div>
-      <div class="btn btn-primary draggable" style="z-index: 1000;" >UP TAIL</div>
-      <div class="btn btn-primary draggable" >DOWN TAIL</div>
-      <div class="dd">
-</div>
+    <ul class="form-group">
+      <li class="btn-primary btn btn-block form-group draggable" >MOVE<input type="text"size="3" maxlength="4" value="90" style="color:black"/>px</li>
+      <li class="btn-primary btn btn-block form-group draggable" >TURN LEFT<input type="text"size="2" maxlength="3" value="90" style="color:black"/>px</li>
+      <li class="btn-primary btn btn-block form-group draggable" >TURN RIGHT<input type="text"size="2" maxlength="3" value="90" style="color:black"/>px</li>
+      <li class="btn-primary btn btn-block form-group draggable" style="z-index: 1000;" >UP TAIL</li>
+      <li class="btn-primary btn btn-block form-group draggable" >DOWN TAIL</li>
+       <li sd='rep' class="btn-warning btn btn-block form-group draggable" >REPEAT<input type="text"size="2" maxlength="3" value="5" style="color:black"/></li>
+      <li sd='rep' class="btn-warning btn btn-block form-group draggable" >END</li>
+    </ul>
     </div>
-    <div class="col-md-2" style="height: auto; border: solid 1px black" id="droppable">  
+    <div class="col-md-2" style="height: auto; border: solid 1px black" >  
     <img src="play.jpg" class="play">
     <img src="pause.png" class="pause">  
     <img src="stop.jpg" class="stop">
+    
     <button class="btn btn-primary clear">Clear</button>
     <input type="range" class="speedRange" min="0.5" max="20" step="2" value="10">
+    <ul id="droppable" width='100px' height='100px' style="border: solid 1px black; height:300px; overflow-y:scroll">
+      
+    </ul>
     </div> 
   </div> 
   </body>
-
-  <script>
-  $(function() {
-    $('.clear').click(function(){
-      $.turtle.cg();
-      $('#turtle').offset({left: 500, top: 300}).pu();
-
-    })
-    $( ".draggable" ).draggable({helper: "clone"});
-    $( "#droppable" ).droppable({
-      drop: function( event, ui ) {
-        var clone = $(ui.helper).clone();
-        clone.css("position","relative");
-        clone.css("left","auto");
-        clone.css("top","auto");
-        clone.draggable({
-        });
-        clone.addClass("xyi");
-        $(this).append(clone);
-      }
-    });
-    var isPaused = false;
-    var inputVal= "";
-    var stopIndex = 0;
-    $('.pause').click(function(){isPaused=true;console.log(isPaused)})
-    $('.stop').click(function(){stopIndex=0;isPaused=true;})
-    $('.play').click(function(){    
-      function running(comand, value){
-        $('#turtle').speed($('.speedRange').val());
-        if (comand === "MOVEpx"){
-          $('#turtle').fd(value);
-        }
-        if (comand === "UP TAIL"){
-          $('#turtle').pu();
-        }
-        if (comand === "TURN LEFTpx"){
-          $('#turtle').lt(value);
-        }
-         if (comand === "TURN RIGHTpx"){
-          $('#turtle').rt(value);
-        }
-         if (comand === "DOWN TAIL"){
-          $('#turtle').pd();
-        }
-      }
-      isPaused = false;
-      var commands = $('#droppable').children(".xyi");
-      var i = stopIndex;      
-      function f(){
-        setTimeout(function(){
-          if(commands.eq(i).children('input').val())
-          {
-            inputVal=commands.eq(i).children('input').val();
-          }
-          running(commands.eq(i).text(),inputVal);
-          ++i;
-          console.log(i);
-          if (isPaused) stopIndex=i;
-          if(i>=commands.size()-1) stopIndex=0;
-          if(i<commands.size() && !isPaused){
-            f(stopIndex);
-          }
-        }, 1000/$('.speedRange').val());
-      }
-      f();      
-    });    
-  });
-  </script>
 </html>
