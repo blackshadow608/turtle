@@ -3,10 +3,9 @@
   <head>
     <link rel="stylesheet" href=bootstrap/dist/css/bootstrap.css>
     <script src="jquery-1.11.3.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <script src="Nestable-master/jquery.nestable.js"></script>
+    <script src="jquery-ui.js"></script>
     <script src="turtle/jquery-turtle.js"></script>
-    <script src="script.js"></script>
+    <script src="scripted.js"></script>
     <title>TURTLE GRAPHIC</title>
   </head>
   <style type="text/css">
@@ -25,12 +24,13 @@
     $("#turtle").pen('red').pu();
 </script>
     </div>
-    <div class="col-md-3" id="commandsnds">
+    <div class="col-md-2"></div>
+    <div class="col-md-2" id="commandsnds">
     <ul class="form-group">
       <li class="btn-primary btn btn-block form-group draggable" >MOVE<input type="text"size="3" maxlength="4" value="90" style="color:black"/>px</li>
       <li class="btn-primary btn btn-block form-group draggable" >TURN LEFT<input type="text"size="2" maxlength="3" value="90" style="color:black"/>px</li>
       <li class="btn-primary btn btn-block form-group draggable" >TURN RIGHT<input type="text"size="2" maxlength="3" value="90" style="color:black"/>px</li>
-      <li class="btn-primary btn btn-block form-group draggable" style="z-index: 1000;" >UP TAIL</li>
+      <li class="btn-primary btn btn-block form-group draggable" >UP TAIL</li>
       <li class="btn-primary btn btn-block form-group draggable" >DOWN TAIL</li>
        <li sd='rep' class="btn-warning btn btn-block form-group draggable" >REPEAT<input type="text"size="2" maxlength="3" value="5" style="color:black"/></li>
       <li sd='rep' class="btn-warning btn btn-block form-group draggable" >END</li>
@@ -42,8 +42,8 @@
     <img src="stop.jpg" class="stop">
     
     <button class="btn btn-primary clear">Clear</button>
-    <input type="range" class="speedRange" min="0.5" max="20" step="2" value="10">
-    <ul id="droppable" width='100px' height='100px' style="border: solid 1px black; height:300px; overflow-y:scroll">
+    <input type="range" class="speedRange" min="0.5" max="50" step="1" value="10">
+    <ul id="droppable" width='100px' height='100px' style="border: solid 1px black; height:500px; overflow-y:scroll">
       
     </ul>
     </div> 

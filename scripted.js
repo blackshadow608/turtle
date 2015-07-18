@@ -50,45 +50,54 @@
           $('#turtle').pd();
         }
       }
-      isPaused = false;
       var commands = $('#droppable').children(".xyi");
+      var compiled=[];
+      for(var i=0;i<commands.size();i++){
+        inputVal = "";
+        if(commands.eq(i).text()!=='REPEAT')
+        {
+          if(commands.eq(i).children('input').val())
+            {
+              inputVal=commands.eq(i).children('input').val();
+            }
+          compiled.push({
+            'command':commands.eq(i).text(),
+            'valik':inputVal
+          })
+        }else{
+          var rep=commands.eq(i).children('input').val()-1;
+          var tempArray=[];
+          i++;          
+          while(commands.eq(i).text()!='END'){
+            if(commands.eq(i).children('input').val())
+            {
+              inputVal=commands.eq(i).children('input').val();
+            }
+            tempArray.push({
+              'command':commands.eq(i).text(),
+              'valik':commands.eq(i).children('input').val()
+            })
+            i++;
+          }
+          var tmp=tempArray
+          for (var j=0;j<rep;j++){
+            tempArray=tempArray.concat(tmp);
+          }
+          console.log(tempArray);
+
+          compiled = compiled.concat(tempArray);
+        }
+      }
+      isPaused = false;
       var i = stopIndex;      
       function f(){
         setTimeout(function(){
-          if(commands.eq(i).children('input').val())
-          {
-            inputVal=commands.eq(i).children('input').val();
-          }
-
-          if(commands.eq(i).text()==='REPEAT')
-          {   var k=0;         
-            for (var j = 0; j < commands.eq(i).children('input').val(); j++) {
-                
-              function repeat(){
-              setTimeout(function(){
-              k=i;
-              while(commands.eq(k).text() !== 'END'){         
-                if(commands.eq(k).children('input').val())
-                {
-                  inputVal=commands.eq(k).children('input').val();
-                }
-                running(commands.eq(k).text(),inputVal);
-                ++k;
-                }
-              }, 1000/$('.speedRange').val());}
-              
-              repeat();
-            };
-            console.log(k);
-            if(j==commands.eq(i).children('input').val()-1){i=k;}
-          }
-
-          running(commands.eq(i).text(),inputVal);
+          running(compiled[i].command,compiled[i].valik);
           ++i;
           console.log(i);
           if (isPaused) stopIndex=i;
-          if(i>=commands.size()-1) stopIndex=0;
-          if(i<commands.size() && !isPaused){
+          if(i>=compiled.length-1) stopIndex=0;
+          if(i<compiled.length && !isPaused){
             f(stopIndex);
           }
         }, 1000/$('.speedRange').val());
